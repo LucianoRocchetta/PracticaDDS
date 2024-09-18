@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.dds.ejercicio_02.personajes;
 
+import ar.edu.utn.frba.dds.ejercicio_02.converters.ElementoConverter;
 import ar.edu.utn.frba.dds.ejercicio_02.elementos.ElementoDefensor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,17 +16,14 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Personaje {
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Getter
-  @ManyToMany
-  @JoinTable(
-          name = "personaje_elemento",
-          joinColumns = @JoinColumn(name = "personaje_id",
-                  referencedColumnName = "id"),
-          inverseJoinColumns = @JoinColumn(name = "categoria_id", referencedColumnName = "id")
-  )
+  @ElementCollection()
+  @CollectionTable(name = "ElementoDefensor")
+  @Convert(converter = ElementoConverter.class)
+  @Column(name = "elemento")
   private List<ElementoDefensor> elementos;
 
   @Getter @Setter
